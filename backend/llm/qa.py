@@ -68,6 +68,7 @@ class AnswerConversationBufferMemory(ConversationBufferMemory):
 def get_environment_variables():
     '''Get the environment variables.'''
     openai_api_key = os.getenv("OPENAI_API_KEY")
+    openai_api_base = os.environ.get("OPENAI_BASE_URL")
     anthropic_api_key = os.getenv("ANTHROPIC_API_KEY")
     supabase_url = os.getenv("SUPABASE_URL")
     supabase_key = os.getenv("SUPABASE_SERVICE_KEY")
@@ -83,7 +84,7 @@ def create_clients_and_embeddings(openai_api_key, supabase_url, supabase_key):
 
 def get_qa_llm(chat_message: ChatMessage, user_id: str, user_openai_api_key: str, with_sources: bool = True):
     '''Get the question answering language model.'''
-    openai_api_key, anthropic_api_key, supabase_url, supabase_key = get_environment_variables()
+    openai_api_key, openai_api_base, anthropic_api_key, supabase_url, supabase_key = get_environment_variables()
 
     '''User can override the openai_api_key'''
     if user_openai_api_key is not None and user_openai_api_key != "":
@@ -109,7 +110,7 @@ def get_qa_llm(chat_message: ChatMessage, user_id: str, user_openai_api_key: str
     if chat_message.model.startswith("gpt"):
         qa = ConversationalRetrievalChain.from_llm(
             ChatOpenAI(
-                model_name=chat_message.model, openai_api_key=openai_api_key, 
+                model_name=chat_message.model, openai_api_key=openai_api_key, openai_api_base=openai_api_base,
                 temperature=chat_message.temperature, max_tokens=chat_message.max_tokens), 
                 vector_store.as_retriever(), memory=memory, verbose=True, 
                 return_source_documents=with_sources,
