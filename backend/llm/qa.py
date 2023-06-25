@@ -68,12 +68,12 @@ class AnswerConversationBufferMemory(ConversationBufferMemory):
 def get_environment_variables():
     '''Get the environment variables.'''
     openai_api_key = os.getenv("OPENAI_API_KEY")
-    openai_api_base = os.environ.get("OPENAI_BASE_URL")
+    openai_api_base = os.environ.get("OPENAI_API_BASE")
     anthropic_api_key = os.getenv("ANTHROPIC_API_KEY")
     supabase_url = os.getenv("SUPABASE_URL")
     supabase_key = os.getenv("SUPABASE_SERVICE_KEY")
     
-    return openai_api_key, anthropic_api_key, supabase_url, supabase_key
+    return openai_api_key, openai_api_base, anthropic_api_key, supabase_url, supabase_key
 
 def create_clients_and_embeddings(openai_api_key, supabase_url, supabase_key):
     '''Create the clients and embeddings.'''
